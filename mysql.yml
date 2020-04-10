@@ -1,0 +1,17 @@
+##
+# 
+
+---
+- hosts: all
+  remote_user: root
+
+  tasks:
+
+    - name: Create database
+      mysql_db: db=cinfo_database state=present
+
+    - name: Ensure no user named 'cinfoadmin' exists and delete if found.
+      mysql_user: user=cinfoadmin state=absent
+
+    - name: Create database user
+      mysql_user: user=cinfoadmin password=cinfo1f4al** priv=*.*:ALL state=present
