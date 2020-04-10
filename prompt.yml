@@ -1,0 +1,44 @@
+---
+
+# it is possible to ask for variables from the user at the start
+# of a playbook run, for example, as part of a release script.
+
+- hosts: all
+  remote_user: root
+
+# 
+# here's basic mode prompting.  Specify a hash of variable names and a prompt for
+# each.
+#
+  vars_prompt:
+     release_version: "product release version"
+
+# prompts can also be specified like this, allowing for hiding the prompt as
+# entered.  In the future, this may also be used to support crypted variables
+
+  vars_prompt:
+    - name: "passwd"
+      prompt: "Enter password"
+      private: yes
+
+    - name: "release_version"
+      prompt: "Product release version"
+      default: "default"
+      private: no
+
+    - name: "passwd2"
+      prompt: "Enter password 2"
+      private: yes
+      encrypt: "md5_crypt"
+      confirm: yes
+      salt_size: 7
+      salt: "foo"
+
+# 
+  tasks:
+
+  - name: {{release_version}}
+    shell: echo foo >> /tmp/{{release_version}}-alpha
+
+  - name: crypted a password
+    shell: echo my password is {{passwd2}}
